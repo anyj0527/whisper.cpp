@@ -191,7 +191,7 @@ libwhisper.so: ggml.o whisper.o
 	$(CXX) $(CXXFLAGS) -shared -o libwhisper.so ggml.o whisper.o $(LDFLAGS)
 
 clean:
-	rm -f *.o main stream command talk bench libwhisper.a libwhisper.so
+	rm -f *.o main stream command talk bench libwhisper.a libwhisper.so libnnstreamer-whisper.so
 
 #
 # Examples
@@ -217,6 +217,9 @@ talk: examples/talk/talk.cpp examples/talk/gpt-2.cpp $(SRC_COMMON) $(SRC_COMMON_
 
 bench: examples/bench/bench.cpp ggml.o whisper.o
 	$(CXX) $(CXXFLAGS) examples/bench/bench.cpp ggml.o whisper.o -o bench $(LDFLAGS)
+
+nnstreamer: examples/nnstreamer.cpp.filter/whisper_cpp_class.cpp ggml.o whisper.cpp examples/common.cpp
+	$(CXX) $(CXXFLAGS) -shared -Wl,-soname,libnnstreamer-whisper.so whisper.cpp examples/nnstreamer.cpp.filter/whisper_cpp_class.cpp -o libnnstreamer-whisper.so ggml.o `pkg-config --cflags --libs nnstreamer-cpp` $(LDFLAGS)
 
 #
 # Audio samples
