@@ -433,7 +433,7 @@ libwhisper.so: $(WHISPER_OBJ)
 	$(CXX) $(CXXFLAGS) -shared -o libwhisper.so $(WHISPER_OBJ) $(LDFLAGS)
 
 clean:
-	rm -f *.o main stream command talk talk-llama bench quantize server lsp libwhisper.a libwhisper.so
+	rm -f *.o main stream command talk talk-llama bench quantize server lsp libwhisper.a libwhisper.so libnnstreamer-whisper.so
 
 #
 # Examples
@@ -471,6 +471,9 @@ talk: examples/talk/talk.cpp examples/talk/gpt-2.cpp $(SRC_COMMON) $(SRC_COMMON_
 
 talk-llama: examples/talk-llama/talk-llama.cpp examples/talk-llama/llama.cpp examples/talk-llama/unicode.cpp examples/talk-llama/unicode-data.cpp $(SRC_COMMON) $(SRC_COMMON_SDL) $(WHISPER_OBJ)
 	$(CXX) $(CXXFLAGS) examples/talk-llama/talk-llama.cpp examples/talk-llama/llama.cpp examples/talk-llama/unicode.cpp examples/talk-llama/unicode-data.cpp $(SRC_COMMON) $(SRC_COMMON_SDL) $(WHISPER_OBJ) -o talk-llama $(CC_SDL) $(LDFLAGS)
+
+nnstreamer: examples/nnstreamer.cpp.filter/whisper_cpp_class.cpp $(SRC_COMMON) $(WHISPER_OBJ)
+	$(CXX) $(CXXFLAGS) `pkg-config --cflags --libs nnstreamer-cpp` -shared -Wl,-soname,libnnstreamer-whisper.so $(SRC_COMMON) $(WHISPER_OBJ) examples/nnstreamer.cpp.filter/whisper_cpp_class.cpp -o libnnstreamer-whisper.so $(LDFLAGS) `pkg-config --cflags --libs nnstreamer-cpp`
 
 #
 # Audio samples
