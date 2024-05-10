@@ -34,7 +34,8 @@ class nnstreamer_whisper_filter : public tensor_filter_cpp
     bool no_timestamps = false;
 
     std::string language  = "en";
-    std::string model     = "models/ggml-base.en.bin";
+    // std::string model     = "models/ggml-base.en.bin";
+    std::string model     = "models/ggml-tiny.en.bin";
     std::string fname_out;
   };
 

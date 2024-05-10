@@ -38,9 +38,13 @@ endif
 # Compile flags
 #
 
-CFLAGS   = -I.              -O3 -DNDEBUG -std=c11   -fPIC
-CXXFLAGS = -I. -I./examples -O3 -DNDEBUG -std=c++11 -fPIC
-LDFLAGS  =
+CFLAGS   := ${CFLAGS} -I.              -O3 -DNDEBUG -std=c11   -fPIC
+CXXFLAGS := ${CXXFLAGS} -I. -I./examples -O3 -DNDEBUG -std=c++11 -fPIC
+LDFLAGS  := ${LDFLAGS}
+
+$(info CFLAGS   = ${CFLAGS})
+$(info CXXFLAGS = ${CXXFLAGS})
+$(info LDFLAGS  = ${LDFLAGS})
 
 ifdef MACOSX_DEPLOYMENT_TARGET
 	CFLAGS   += -mmacosx-version-min=$(MACOSX_DEPLOYMENT_TARGET)
@@ -319,8 +323,11 @@ ifdef WHISPER_GPROF
 endif
 
 ifneq ($(filter aarch64%,$(UNAME_M)),)
-	CFLAGS   += -mcpu=native
-	CXXFLAGS += -mcpu=native
+	# CFLAGS   += -mcpu=native
+	# CXXFLAGS += -mcpu=native
+	# Raspberry Pi 4
+	CFLAGS   += -funsafe-math-optimizations -mno-unaligned-access
+	CXXFLAGS += -funsafe-math-optimizations -mno-unaligned-access
 endif
 
 ifneq ($(filter armv6%,$(UNAME_M)),)
